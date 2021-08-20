@@ -744,7 +744,7 @@ end
 RegisterNetEvent('event:control:bennys')
 AddEventHandler('event:control:bennys', function(useID)
     if IsPedInAnyVehicle(PlayerPedId(), false) then
-        bennyHeading = bennyGarages[useID].coords.w
+        bennyHeading = bennyGarages[useID].coords
         if not isPlyInBennys then -- Bennys
             enterLocation(bennyLocation)
         end
