@@ -133,7 +133,7 @@ function RepairVehicle()
     Citizen.CreateThread(function ()
         local plyPed = PlayerPedId()
         local plyVeh = GetVehiclePedIsIn(plyPed, false)
-
+	local fuel = GetVehicleFuelLevel(plyVeh)
         local vehBodyHealth = GetVehicleBodyHealth(plyVeh)
         local vehEngineHealth = GetVehicleEngineHealth(plyVeh)
 
