@@ -133,39 +133,48 @@ function RepairVehicle()
     Citizen.CreateThread(function ()
         local plyPed = PlayerPedId()
         local plyVeh = GetVehiclePedIsIn(plyPed, false)
-        local fuel = GetVehicleFuelLevel(plyVeh)
+
         local vehBodyHealth = GetVehicleBodyHealth(plyVeh)
         local vehEngineHealth = GetVehicleEngineHealth(plyVeh)
+
         local missingBodyHealth = 1000.0 - vehBodyHealth
         local missingEngineHealth = 1000.0 - vehEngineHealth
+
         SetVehicleHandbrake(plyVeh, true)
-			
+
         if (missingEngineHealth > 50) then
-            local finished = Progressbar(5000 + (missingEngineHealth / 50), "Repairing engine...")
+			local finished = Progressbar(5000 + (missingEngineHealth / 50), "Repairing engine...")
+
             local amountRepaired = missingEngineHealth * finished / 100
+
             SetVehicleEngineHealth(plyVeh, vehEngineHealth + amountRepaired)
+
             SetVehiclePetrolTankHealth(plyVeh, 4000.0)
         end
 
         if missingBodyHealth > 50 then
-            local finished = Progressbar(5000 + (missingBodyHealth / 50), "Repairing body...")
+			local finished = Progressbar(5000 + (missingBodyHealth / 50), "Repairing body...")
+
             local amountRepaired = missingBodyHealth * finished / 100
+
             SetVehicleDeformationFixed(plyVeh)
+
             SetVehicleBodyHealth(plyVeh, vehBodyHealth + amountRepaired)
         end
 
         if (GetVehicleBodyHealth(plyVeh) >= 900 and GetVehicleEngineHealth(plyVeh) >= 900) then
             SetVehicleFixed(plyVeh)
+
             SetVehicleDirtLevel(plyVeh, 0.0)
         end
-			
+
         SetVehicleHandbrake(plyVeh, false)
     end)
 end
 
 function Progressbar(duration, label)
 	local retval = nil
-	QBCore.Functions.Progressbar("RepairVehicle", label, duration, false, true, {
+	QBCore.Functions.Progressbar("repair", label, duration, false, true, {
 		disableMovement = true,
 		disableCarMovement = true,
 		disableMouse = false,
