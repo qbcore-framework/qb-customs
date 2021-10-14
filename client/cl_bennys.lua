@@ -838,7 +838,7 @@ Citizen.CreateThread(function()
                     if nearDefault then
                         if not isPlyInBennys then
                             Draw3DText(v.coords.x, v.coords.y, v.coords.z + 0.5, "[Press ~p~E~w~ - Enter Benny's Motorworks]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55)
-                            if IsControlJustReleased(1, 38) then
+                            if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() and IsControlJustReleased(1, 38) then
                                 if (v.useJob and isAuthorized((QBCore.Functions.GetPlayerData().job.name), k)) or not v.useJob then
                                     TriggerEvent('event:control:bennys', k)
                                 else
