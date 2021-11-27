@@ -319,7 +319,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Enable or Disable Turbo")
 
                 populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Disable", "$0")
-                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. (vehicleCustomisationPrices.turbo.price * price) / 100)
+                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. math.ceil(vehicleCustomisationPrices.turbo.price * price) / 100)
 
                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", currentTurboState, "Installed")
 
@@ -328,7 +328,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Choose a Mod")
 
                 for m, n in pairs(validMods) do
-                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. (vehicleCustomisationPrices.turbo.price * price) / 100)
+                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.ceil(vehicleCustomisationPrices.turbo.price * price) / 100)
 
                     if currentMod == n.id then
                         updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
