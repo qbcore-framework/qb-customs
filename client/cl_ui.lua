@@ -236,6 +236,15 @@ end
 function InitiateMenus(isMotorcycle, vehicleHealth)
     local plyPed = PlayerPedId()
     local plyVeh = GetVehiclePedIsIn(plyPed, false)
+    local model = GetEntityModel(plyVeh)
+    local price = 0
+
+    for k,v in pairs(QBCore.Shared.Vehicles) do
+        if model == v.hash then
+            price = v.price
+        end
+    end
+    
     --#[Repair Menu]#--
     if vehicleHealth < 1000.0 then
         local repairCost = math.ceil(1000 - vehicleHealth)
@@ -288,14 +297,14 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                     tempNum = tempNum + 1
 
                     if maxVehiclePerformanceUpgrades == 0 then
-                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.performance.prices[tempNum])
+                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.ceil(vehicleCustomisationPrices.performance.prices[tempNum] * price) / 100)
 
                         if currentMod == n.id then
                             updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
                         end
                     else
                         if tempNum <= (maxVehiclePerformanceUpgrades + 1) then
-                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.performance.prices[tempNum])
+                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.ceil(vehicleCustomisationPrices.performance.prices[tempNum] * price) / 100)
 
                             if currentMod == n.id then
                                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
@@ -310,7 +319,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Enable or Disable Turbo")
 
                 populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Disable", "$0")
-                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. vehicleCustomisationPrices.turbo.price)
+                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. (vehicleCustomisationPrices.turbo.price * price) / 100)
 
                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", currentTurboState, "Installed")
 
@@ -319,7 +328,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Choose a Mod")
 
                 for m, n in pairs(validMods) do
-                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.cosmetics.price)
+                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. (vehicleCustomisationPrices.turbo.price * price) / 100)
 
                     if currentMod == n.id then
                         updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
