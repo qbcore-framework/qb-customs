@@ -16,12 +16,11 @@ bennyGarages = {
 } ]]
 
 -- ADJUST PRICING
-
 vehicleCustomisationPrices = {
     cosmetics = {price = 400},
     respray = {price = 1000},
     performance = {prices = {0, 3.25, 5.55, 10.45, 15.25, 20.50}}, -- these are percentages
-    turbo = {price = 5.0},
+    turbo = {price = 15000},
     wheels = {price = 400},
     customwheels = {price = 600},
     wheelsmoke = {price = 400},
@@ -35,7 +34,6 @@ vehicleCustomisationPrices = {
 }
 
 -- RESPRAY CATEGORIES
-
 vehicleResprayCategories = {
     {category = "Primary Colour", id = 0},
     {category = "Secondary Colour", id = 1},
@@ -46,7 +44,6 @@ vehicleResprayCategories = {
 }
 
 -- WINDOW TINTS
-
 vehicleWindowTintOptions = {
     {name = "None", id = 0},
     {name = "Pure Black", id = 1},
@@ -55,7 +52,6 @@ vehicleWindowTintOptions = {
 }
 
 -- HEADLIGHTS
-
 vehicleXenonOptions = {
     xenonColours = {
         {name = "Stock", id = 255},
@@ -75,7 +71,6 @@ vehicleXenonOptions = {
 }
 
 -- WHEELS
-
 vehicleWheelOptions = {
     {category = "Custom Tyres", id = -1, wheelID = 23},
     {category = "Tyre Smoke", id = 20, wheelID = 23},
@@ -90,7 +85,6 @@ vehicleWheelOptions = {
 }
 
 -- TIRE SMOKE
-
 vehicleTyreSmokeOptions = {
     {
         name = "White Smoke",
@@ -155,7 +149,6 @@ vehicleTyreSmokeOptions = {
 }
 
 -- NEONS
-
 vehicleNeonOptions = {
     category = "Neons",
         neonTypes = {
@@ -235,7 +228,6 @@ vehicleNeonOptions = {
 }
 
 -- MAIN COMPONENTS
-
 vehicleCustomisation = {
     {category = "Spoiler", id = 0}, 
     {category = "Front Bumper", id = 1},
@@ -277,7 +269,6 @@ vehicleCustomisation = {
     {category = "Window", id = 46},
     {category = "Livery", id = 48},
     {category = "Horns", id = 14, 
-        
         hornNames = {
             {name = "Truck Horn", id = 0},
             {name = "Cop Horn", id = 1},
@@ -336,7 +327,6 @@ vehicleCustomisation = {
 }
 
 -- COLORS
-
 vehicleResprayOptions = {
     {category = "Classic", id = 0,
         colours = {
