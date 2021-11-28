@@ -1,4 +1,5 @@
 --#[Local Variable]#--
+local QBCore = exports['qb-core']:GetCoreObject()
 local currentMenuItemID = 0
 local currentMenuItem = ""
 local currentMenuItem2 = ""
@@ -11,10 +12,6 @@ local currentNeonSide = 0
 local menuStructure = {}
 
 --#[Local Functions]#--
-local function roundNum(num, numDecimalPlaces)
-    return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end
-
 local function toggleMenuContainer(state)
     SendNUIMessage({
         toggleMenuContainer = true,
@@ -121,10 +118,10 @@ local function isMenuActive(menu)
     local menuActive = false
 
     if menu == "modMenu" then
-        for k, v in pairs(vehicleCustomisation) do
+        for k, v in pairs(vehicleCustomisation) do 
             if (v.category:gsub("%s+", "") .. "Menu") == currentMenu then
                 menuActive = true
-
+    
                 break
             else
                 menuActive = false
@@ -134,7 +131,7 @@ local function isMenuActive(menu)
         for k, v in pairs(vehicleResprayOptions) do
             if (v.category:gsub("%s+", "") .. "Menu") == currentMenu then
                 menuActive = true
-
+    
                 break
             else
                 menuActive = false
@@ -144,7 +141,7 @@ local function isMenuActive(menu)
         for k, v in pairs(vehicleWheelOptions) do
             if (v.category:gsub("%s+", "") .. "Menu") == currentMenu then
                 menuActive = true
-
+    
                 break
             else
                 menuActive = false
@@ -154,7 +151,7 @@ local function isMenuActive(menu)
         for k, v in pairs(vehicleNeonOptions.neonTypes) do
             if (v.name:gsub("%s+", "") .. "Menu") == currentMenu then
                 menuActive = true
-
+    
                 break
             else
                 menuActive = false
@@ -226,7 +223,7 @@ function Draw3DText(x, y, z, str, r, g, b, a, font, scaleSize, enableProportiona
         if enableCentre then
             SetTextCentre(1)
         end
-
+        
         SetTextEntry("STRING")
         AddTextComponentString(str)
         DrawText(worldX, worldY)
@@ -236,7 +233,7 @@ end
 function InitiateMenus(isMotorcycle, vehicleHealth)
     local plyPed = PlayerPedId()
     local plyVeh = GetVehiclePedIsIn(plyPed, false)
-    local model = GetEntityModel(plyVeh)
+    model = GetEntityModel(plyVeh)
     local price = 0
 
     for k,v in pairs(QBCore.Shared.Vehicles) do
@@ -244,10 +241,9 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
             price = v.price
         end
     end
-    
     --#[Repair Menu]#--
     if vehicleHealth < 1000.0 then
-        local repairCost = math.ceil(1000 - vehicleHealth)
+        local repairCost = QBCore.Shared.Round(1000 - vehicleHealth)
 
         TriggerServerEvent("qb-customs:updateRepairCost", repairCost)
         createMenu("repairMenu", "Welcome to Benny's Original Motorworks", "Repair Vehicle")
@@ -258,9 +254,9 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
     --#[Main Menu]#--
     createMenu("mainMenu", "Welcome to Benny's Original Motorworks", "Choose a Category")
 
-    for k, v in ipairs(vehicleCustomisation) do
+    for k, v in ipairs(vehicleCustomisation) do 
         local validMods, amountValidMods = CheckValidMods(v.category, v.id)
-
+        
         if amountValidMods > 0 or v.id == 18 then
             populateMenu("mainMenu", v.id, v.category, "none")
         end
@@ -290,21 +286,21 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
         if amountValidMods > 0 or v.id == 18 then
             if v.id == 11 or v.id == 12 or v.id == 13 or v.id == 15 or v.id == 16 then --Performance Upgrades
                 local tempNum = 0
-
+            
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category, "Choose an Upgrade")
 
                 for m, n in pairs(validMods) do
                     tempNum = tempNum + 1
 
                     if maxVehiclePerformanceUpgrades == 0 then
-                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.ceil(vehicleCustomisationPrices.performance.prices[tempNum] * price) / 100)
+                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. QBCore.Shared.Round((vehicleCustomisationPrices.performance.prices[tempNum] * price) / 100))
 
                         if currentMod == n.id then
                             updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
                         end
                     else
                         if tempNum <= (maxVehiclePerformanceUpgrades + 1) then
-                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.ceil(vehicleCustomisationPrices.performance.prices[tempNum] * price) / 100)
+                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. QBCore.Shared.Round((vehicleCustomisationPrices.performance.prices[tempNum] * price) / 100))
 
                             if currentMod == n.id then
                                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
@@ -312,14 +308,14 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                         end
                     end
                 end
-
+                
                 finishPopulatingMenu(v.category:gsub("%s+", "") .. "Menu")
             elseif v.id == 18 then
                 local currentTurboState = GetCurrentTurboState()
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Enable or Disable Turbo")
 
                 populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Disable", "$0")
-                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. math.ceil(vehicleCustomisationPrices.turbo.price * price) / 100)
+                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. vehicleCustomisationPrices.turbo.price)
 
                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", currentTurboState, "Installed")
 
@@ -328,13 +324,13 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Choose a Mod")
 
                 for m, n in pairs(validMods) do
-                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.ceil(vehicleCustomisationPrices.turbo.price * price) / 100)
+                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.cosmetics.price)
 
                     if currentMod == n.id then
                         updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
                     end
                 end
-
+                
                 finishPopulatingMenu(v.category:gsub("%s+", "") .. "Menu")
             end
         end
@@ -362,7 +358,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
     finishPopulatingMenu("ResprayTypeMenu")
 
     --#[Respray Colours]#--
-    for k, v in ipairs(vehicleResprayOptions) do
+    for k, v in ipairs(vehicleResprayOptions) do 
         createMenu(v.category .. "Menu", v.category .. " Colours", "Choose a Colour")
 
         for m, n in ipairs(v.colours) do
@@ -375,7 +371,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
     --#[Wheel Categories Menu]#--
     createMenu("WheelsMenu", "Wheel Categories", "Choose a Category")
 
-    for k, v in ipairs(vehicleWheelOptions) do
+    for k, v in ipairs(vehicleWheelOptions) do 
         if isMotorcycle then
             if v.id == -1 or v.id == 20 or v.id == 6 then --Motorcycle Wheels
                 populateMenu("WheelsMenu", v.id, v.category, "none")
@@ -388,7 +384,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
     finishPopulatingMenu("WheelsMenu")
 
     --#[Wheels Menu]#--
-    for k, v in ipairs(vehicleWheelOptions) do
+    for k, v in ipairs(vehicleWheelOptions) do 
         if v.id == -1 then
             local currentCustomWheelState = GetCurrentCustomWheelState()
             createMenu(v.category:gsub("%s+", "") .. "Menu", v.category, "Enable or Disable Custom Wheels")
@@ -444,7 +440,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth)
     local currentWindowTint = GetCurrentWindowTint()
     createMenu("WindowTintMenu", "Window Tint Customisation", "Choose a Tint")
 
-    for k, v in ipairs(vehicleWindowTintOptions) do
+    for k, v in ipairs(vehicleWindowTintOptions) do 
         populateMenu("WindowTintMenu", v.id, v.name, "$" .. vehicleCustomisationPrices.windowtint.price)
 
         if currentWindowTint == v.id then
@@ -610,7 +606,7 @@ function MenuManager(state)
                         updateMenuStatus("Not Enough Money!")
                     end
                 elseif currentCategory == 11 or currentCategory == 12 or currentCategory== 13 or currentCategory == 15 or currentCategory == 16 then --Performance Upgrades
-                    if AttemptPurchase("performance", currentMenuItemID) then
+                    if AttemptPurchase("performance", currentMenuItemID, model) then
                         ApplyMod(currentCategory, currentMenuItemID)
                         playSoundEffect("wrench", 0.4)
                         updateItem2Text(currentMenu, currentMenuItemID, "Installed")
@@ -693,7 +689,7 @@ function MenuManager(state)
                     updateMenuStatus("Purchased")
                 else
                     updateMenuStatus("Not Enough Money")
-                end
+                end 
             else
                 if currentMenu == "repairMenu" then
                     if AttemptPurchase("repair") then
@@ -739,7 +735,7 @@ function MenuManager(state)
 
                     currentMenu = currentMenuItem:gsub("%s+", "") .. "Menu"
                     currentWheelCategory = currentMenuItemID
-
+                    
                     if currentWheelType == currentWheelCategory then
                         updateItem2Text(currentMenu, currentWheel, "Installed")
                     end
@@ -813,7 +809,7 @@ function MenuManager(state)
                             updateItem2Text(currentMenu, currentMenuItemID, "Installed")
                             updateMenuStatus("Purchased")
                         else
-                            updateMenuStatus("Not Enough Money")
+                            updateMenuStatus("Not Enough Money")   
                         end
                     end
                 elseif currentMenu == "PlateIndexMenu" then
@@ -826,7 +822,7 @@ function MenuManager(state)
                             updateItem2Text(currentMenu, currentMenuItemID, "Installed")
                             updateMenuStatus("Purchased")
                         else
-                            updateMenuStatus("Not Enough Money")
+                            updateMenuStatus("Not Enough Money")   
                         end
                     end
                 elseif currentMenu == "VehicleExtrasMenu" then
@@ -968,14 +964,10 @@ end
 --#[NUI Callbacks]#--
 RegisterNUICallback("selectedItem", function(data, cb)
     updateCurrentMenuItemID(tonumber(data.id), data.item, data.item2)
-
-    --print("Current Selected Item: " .. currentMenuItemID)
-
     cb("ok")
 end)
 
 RegisterNUICallback("updateItem2", function(data, cb)
     currentMenuItem2 = data.item
-
     cb("ok")
 end)
