@@ -2,7 +2,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 local chicken = vehicleBaseRepairCost
 
-RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
+RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel, model)
     local source = source
     local Player = QBCore.Functions.GetPlayer(source)
     local balance = nil
@@ -11,6 +11,13 @@ RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
     else
         balance = Player.Functions.GetMoney(moneyType)
     end
+
+    for k,v in pairs(QBCore.Shared.Vehicles) do
+        if model == v.hash then
+            carPrice = v.price
+        end
+    end
+
     if type == "repair" then
         if balance >= chicken then
             if Player.PlayerData.job.name == "mechanic" then
@@ -23,13 +30,13 @@ RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
             TriggerClientEvent('qb-customs:purchaseFailed', source)
         end
     elseif type == "performance" then
-        if balance >= vehicleCustomisationPrices[type].prices[upgradeLevel] then
+        if balance >= QBCore.Shared.Round((vehicleCustomisationPrices[type].prices[upgradeLevel] * carPrice) / 100, 0) then
             TriggerClientEvent('qb-customs:purchaseSuccessful', source)
             if Player.PlayerData.job.name == "mechanic" then
                 TriggerEvent('qb-bossmenu:server:removeAccountMoney', Player.PlayerData.job.name,
                     vehicleCustomisationPrices[type].prices[upgradeLevel])
             else
-                Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].prices[upgradeLevel], "bennys")
+                Player.Functions.RemoveMoney(moneyType, QBCore.Shared.Round((vehicleCustomisationPrices[type].prices[upgradeLevel] * carPrice) / 100), "bennys")
             end
         else
             TriggerClientEvent('qb-customs:purchaseFailed', source)
