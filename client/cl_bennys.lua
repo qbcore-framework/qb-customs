@@ -30,7 +30,6 @@ local isPurchaseSuccessful = false
 local bennyLocation
 
 --Blips
-
 CreateThread(function()
     for k, v in pairs(bennyGarages) do
         local blip = AddBlipForCoord(v.coords.x,v.coords.y,v.coords.z)
@@ -86,7 +85,7 @@ function RepairVehicle()
     SetVehicleFixed(plyVeh)
 	SetVehicleDirtLevel(plyVeh, 0.0)
     SetVehiclePetrolTankHealth(plyVeh, 4000.0)
-    TriggerEvent('veh.randomDegredation',10,plyVeh,3)
+    TriggerEvent('veh.randomDegredation', 10, plyVeh, 3)
 end
 
 function GetCurrentMod(id)
@@ -219,7 +218,6 @@ function CheckValidMods(category, id, wheelType)
         for k, v in pairs(vehicleCustomisation) do
             if vehicleCustomisation[k].category == category then
                 hornNames = vehicleCustomisation[k].hornNames
-
                 break
             end
         end
@@ -235,10 +233,10 @@ function CheckValidMods(category, id, wheelType)
                 if i <= #hornNames then
                     modName = hornNames[i].name
                 else
-                    modName = "Horn " .. i
+                    modName = "Horn "..i
                 end
             else
-                modName = category .. " " .. i
+                modName = category.." "..i
             end
         end
 
@@ -254,7 +252,7 @@ function CheckValidMods(category, id, wheelType)
     if modAmount > 0 then
         table.insert(validMods, 1, {
             id = -1,
-            name = "Stock " .. category
+            name = "Stock "..category
         })
     end
 
@@ -556,10 +554,8 @@ function ApplyColour(paintType, paintCategory, paintID)
     if paintType == 0 then --Primary Colour
         if paintCategory == 1 then --Metallic Paint
             SetVehicleColours(plyVeh, paintID, vehSecondaryColour)
-            -- SetVehicleExtraColours(plyVeh, paintID, vehWheelColour)
             SetVehicleExtraColours(plyVeh, originalPearlescentColour, vehWheelColour)
             originalPrimaryColour = paintID
-            -- originalPearlescentColour = paintID
         else
             SetVehicleColours(plyVeh, paintID, vehSecondaryColour)
             originalPrimaryColour = paintID
@@ -705,7 +701,6 @@ function enterLocation(locationsPos)
 
     SetVehicleModKit(plyVeh, 0)
     SetEntityCoords(plyVeh, locationsPos)
-    --SetEntityHeading(plyVeh, bennyHeading)
     FreezeEntityPosition(plyVeh, true)
     SetEntityCollision(plyVeh, false, true)
 
@@ -730,7 +725,6 @@ function enterLocation(locationsPos)
 
     isPlyInBennys = true
 end
-
 
 function disableControls()
     DisableControlAction(1, 38, true) --Key: E
@@ -823,9 +817,7 @@ RegisterNetEvent("qb-customs:purchaseFailed", function()
     QBCore.Functions.Notify("Not enough money", "error")
 end)
 
-
 --helper function
-
 function isAuthorized(job, location)
     for a=1, #bennyGarages[location].job do
         if job == bennyGarages[location].job[a] then
