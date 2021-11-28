@@ -33,7 +33,6 @@ local bennyLocation
 
 CreateThread(function()
     for k, v in pairs(bennyGarages) do
-        if v.blip then
         local blip = AddBlipForCoord(v.coords.x,v.coords.y,v.coords.z)
         SetBlipSprite(blip, 72)
         SetBlipScale(blip, 0.7)
@@ -41,7 +40,6 @@ CreateThread(function()
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentString("Benny's Motorworks")
         EndTextCommandSetBlipName(blip)
-        end
     end
 end)
 
@@ -61,12 +59,12 @@ local function saveVehicle()
 end
 
 --#[Global Functions]#--
-function AttemptPurchase(type, upgradeLevel)
+function AttemptPurchase(type, upgradeLevel, model)
 
     if upgradeLevel ~= nil then
         upgradeLevel = upgradeLevel + 2
     end
-    TriggerServerEvent("qb-customs:attemptPurchase", type, upgradeLevel)
+    TriggerServerEvent("qb-customs:attemptPurchase", type, upgradeLevel, model)
 
     attemptingPurchase = true
 
@@ -707,7 +705,7 @@ function enterLocation(locationsPos)
 
     SetVehicleModKit(plyVeh, 0)
     SetEntityCoords(plyVeh, locationsPos)
-    SetEntityHeading(plyVeh, bennyHeading)
+    --SetEntityHeading(plyVeh, bennyHeading)
     FreezeEntityPosition(plyVeh, true)
     SetEntityCollision(plyVeh, false, true)
 
@@ -790,13 +788,13 @@ CreateThread(function()
                         if not isPlyInBennys then
                             Draw3DText(v.coords.x, v.coords.y, v.coords.z + 0.5, "[Press ~p~E~w~ - Enter Benny's Motorworks]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55)
                             if IsControlJustReleased(1, 38) then
-				if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
-					if (v.useJob and isAuthorized((QBCore.Functions.GetPlayerData().job.name), k)) or not v.useJob then
-					    TriggerEvent('event:control:bennys', k)
-					else
-					    QBCore.Functions.Notify("You are not authorized", "error")
-					end
-				end
+                                if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
+                                    if (v.useJob and isAuthorized((QBCore.Functions.GetPlayerData().job.name), k)) or not v.useJob then
+                                        TriggerEvent('event:control:bennys', k)
+                                    else
+                                        QBCore.Functions.Notify("You are not authorized", "error")
+                                    end
+                                end
                             end
                         else
                             disableControls()
