@@ -25,6 +25,8 @@ local originalNeonColourB = nil
 local originalXenonColour = nil
 local originalOldLivery = nil
 local originalPlateIndex = nil
+local originalXenonState = nil
+local originalTurboState = nil
 local attemptingPurchase = false
 local isPurchaseSuccessful = false
 local bennyLocation
@@ -369,6 +371,18 @@ function RestorePlateIndex()
     SetVehicleNumberPlateTextIndex(plyVeh, originalPlateIndex)
 end
 
+function RestoreXenonState()
+    local plyPed = PlayerPedId()
+    local plyVeh = GetVehiclePedIsIn(plyPed, false)
+    ToggleVehicleMod(plyVeh, 22, originalXenonState)
+end
+
+function RestoreTurboState()
+    local plyPed = PlayerPedId()
+    local plyVeh = GetVehiclePedIsIn(plyPed, false)
+    ToggleVehicleMod(plyVeh, 18, originalTurboState)
+end
+
 function PreviewMod(categoryID, modID)
     local plyPed = PlayerPedId()
     local plyVeh = GetVehiclePedIsIn(plyPed, false)
@@ -396,6 +410,28 @@ function PreviewWindowTint(windowTintID)
     end
 
     SetVehicleWindowTint(plyVeh, windowTintID)
+end
+
+function PreviewXenonState(state)
+    local plyPed = PlayerPedId()
+    local plyVeh = GetVehiclePedIsIn(plyPed, false)
+
+    if originalXenonState == nil then
+        originalXenonState = IsToggleModOn(plyVeh, 22)
+    end
+
+    ToggleVehicleMod(plyVeh, 22, state)
+end
+
+function PreviewTurboState(state)
+    local plyPed = PlayerPedId()
+    local plyVeh = GetVehiclePedIsIn(plyPed, false)
+
+    if originalTurboState == nil then
+        originalTurboState = IsToggleModOn(plyVeh, 18)
+    end
+
+    ToggleVehicleMod(plyVeh, 18, state)
 end
 
 function PreviewColour(paintType, paintCategory, paintID)
@@ -514,6 +550,7 @@ function ApplyMod(categoryID, modID)
 
     if categoryID == 18 then
         ToggleVehicleMod(plyVeh, categoryID, modID)
+        originalTurboState = modID
     elseif categoryID == 11 or categoryID == 12 or categoryID== 13 or categoryID == 15 or categoryID == 16 then --Performance Upgrades
         originalCategory = categoryID
         originalMod = modID
@@ -636,7 +673,7 @@ end
 function ApplyXenonLights(category, state)
     local plyPed = PlayerPedId()
     local plyVeh = GetVehiclePedIsIn(plyPed, false)
-
+    originalXenonState = state
     ToggleVehicleMod(plyVeh, category, state)
 end
 
