@@ -770,38 +770,45 @@ function enterLocation(locationsPos)
     isPlyInBennys = true
 end
 
-
 function disableControls()
-    DisableControlAction(1, 38, true) --Key: E
-    DisableControlAction(1, 172, true) --Key: Up Arrow
-    DisableControlAction(1, 173, true) --Key: Down Arrow
-    DisableControlAction(1, 177, true) --Key: Backspace
-    DisableControlAction(1, 176, true) --Key: Enter
-    DisableControlAction(1, 71, true) --Key: W (veh_accelerate)
-    DisableControlAction(1, 72, true) --Key: S (veh_brake)
-    DisableControlAction(1, 34, true) --Key: A
-    DisableControlAction(1, 35, true) --Key: D
-    DisableControlAction(1, 75, true) --Key: F (veh_exit)
+    CreateThread(function()
+        while isPlyInBennys do
+            SetVehicleHandbrake(GetVehiclePedIsIn(PlayerPedId(), false), true)
+            DisableControlAction(1, 38, true) --Key: E
+            DisableControlAction(1, 172, true) --Key: Up Arrow
+            DisableControlAction(1, 173, true) --Key: Down Arrow
+            DisableControlAction(1, 177, true) --Key: Backspace
+            DisableControlAction(1, 176, true) --Key: Enter
+            -- DisableControlAction(1, 71, true) --Key: W (veh_accelerate)
+            DisableControlAction(1, 72, true) --Key: S (veh_brake)
+            DisableControlAction(1, 34, true) --Key: A
+            DisableControlAction(1, 35, true) --Key: D
+            DisableControlAction(1, 75, true) --Key: F (veh_exit)
 
-    if IsDisabledControlJustReleased(1, 172) then --Key: Arrow Up
-        MenuScrollFunctionality("up")
-        PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-    end
+            if IsDisabledControlJustReleased(1, 172) then --Key: Arrow Up
+                MenuScrollFunctionality("up")
+                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+            end
 
-    if IsDisabledControlJustReleased(1, 173) then --Key: Arrow Down
-        MenuScrollFunctionality("down")
-        PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-    end
+            if IsDisabledControlJustReleased(1, 173) then --Key: Arrow Down
+                MenuScrollFunctionality("down")
+                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+            end
 
-    if IsDisabledControlJustReleased(1, 176) then --Key: Enter
-        MenuManager(true)
-        PlaySoundFrontend(-1, "OK", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-    end
+            if IsDisabledControlJustReleased(1, 176) then --Key: Enter
+                MenuManager(true)
+                PlaySoundFrontend(-1, "OK", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+            end
 
-    if IsDisabledControlJustReleased(1, 177) then --Key: Backspace
-        MenuManager(false)
-        PlaySoundFrontend(-1, "NO", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
-    end
+            if IsDisabledControlJustReleased(1, 177) then --Key: Backspace
+                MenuManager(false)
+                PlaySoundFrontend(-1, "NO", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+            end
+
+            Wait(0)
+        end
+        SetVehicleHandbrake(GetVehiclePedIsIn(PlayerPedId(), false), false)
+    end)
 end
 
 -- #MarkedForMarker
