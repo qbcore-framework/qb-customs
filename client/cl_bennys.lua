@@ -869,6 +869,11 @@ RegisterNetEvent("qb-customs:purchaseFailed", function()
     QBCore.Functions.Notify("Not enough money", "error")
 end)
 
+AddEventHandler("onResourceStop", function(resource)
+    if resource == GetCurrentResourceName() and isPlyInBennys then
+        ExitBennys()
+    end
+end)
 
 --helper function
 
