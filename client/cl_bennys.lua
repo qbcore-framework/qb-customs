@@ -828,9 +828,9 @@ end)
 
 --helper function
 
-function isAuthorized(job, location)
-    for a=1, #bennyGarages[location].job do
-        if job == bennyGarages[location].job[a] then
+function isAuthorized(job, coords)
+    for a=1, #bennyGarages[coords].job do
+        if job == bennyGarages[coords].job[a] then
             return true
         end
     end
