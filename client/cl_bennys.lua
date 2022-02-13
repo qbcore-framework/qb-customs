@@ -3,7 +3,6 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local isPlyInBennys = false
 local plyFirstJoin = false
 local nearDefault = false
-local bennyHeading = 319.73135375977
 local originalCategory = nil
 local originalMod = nil
 local originalPrimaryColour = nil
@@ -84,12 +83,10 @@ end
 function RepairVehicle()
     local plyPed = PlayerPedId()
     local plyVeh = GetVehiclePedIsIn(plyPed, false)
-    local getFuel = GetVehicleFuelLevel(plyVeh)
 
     SetVehicleFixed(plyVeh)
 	SetVehicleDirtLevel(plyVeh, 0.0)
     SetVehiclePetrolTankHealth(plyVeh, 4000.0)
-    SetVehicleFuelLevel(plyVeh, getFuel)
     TriggerEvent('veh.randomDegredation',10,plyVeh,3)
 end
 
@@ -708,10 +705,7 @@ function enterLocation(locationsPos)
     local isMotorcycle = false
 
     SetVehicleModKit(plyVeh, 0)
-    SetEntityCoords(plyVeh, locationsPos)
-    SetEntityHeading(plyVeh, bennyHeading)
     FreezeEntityPosition(plyVeh, true)
-    SetEntityCollision(plyVeh, false, true)
 
     if GetVehicleClass(plyVeh) == 8 then --Motorcycle
         isMotorcycle = true
@@ -769,50 +763,55 @@ function disableControls()
     end
 end
 
--- #MarkedForMarker
---#[Citizen Threads]#--
+
 CreateThread(function()
     while true do
-        local plyPed = PlayerPedId()
+        local inZone = false
+        local PlayerPed = PlayerPedId()
+        local PlayerPos = GetEntityCoords(PlayerPed)
 
-        if IsPedInAnyVehicle(plyPed, false) then
-            local plyPos = GetEntityCoords(plyPed)
+        if IsPedInAnyVehicle(PlayerPed, false) then
             for k, v in pairs(bennyGarages) do
-
-                nearDefault = isNear(plyPos, vector3(v.coords.x,v.coords.y,v.coords.z), 10)
-
-                if nearDefault then
-                    if not isPlyInBennys and nearDefault then
-                        DrawMarker(21, v.coords.x, v.coords.y, v.coords.z + 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 148, 0, 211, 255, true, false, 2, true, nil, nil, false)
-                    end
-
+                local position = bennyGarages[k]["coords"]
+                local dist = #(PlayerPos - vector3(position["x"], position["y"], position["z"]))
                     bennyLocation = vector3(v.coords.x, v.coords.y, v.coords.z)
-
-                    if nearDefault then
-                        if not isPlyInBennys then
-                            Draw3DText(v.coords.x, v.coords.y, v.coords.z + 0.5, "[Press ~p~E~w~ - Enter Benny's Motorworks]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55)
+                if dist < 5 then
+                    inZone = true
+                    if not isPlyInBennys then
                             if IsControlJustReleased(1, 38) then
-				if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
-					if (v.useJob and isAuthorized((QBCore.Functions.GetPlayerData().job.name), k)) or not v.useJob then
-					    TriggerEvent('event:control:bennys', k)
-					else
-					    QBCore.Functions.Notify("You are not authorized", "error")
-					end
-				end
+                                exports['qb-core']:KeyPressed()
+                                if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId() then
+                                    if (v.useJob and isAuthorized((QBCore.Functions.GetPlayerData().job.name), k)) or not v.useJob then
+                                        TriggerEvent('event:control:bennys', k)
+                                    else
+                                        QBCore.Functions.Notify("You are not authorized", "error")
+                                    end
+                                end
                             end
-                        else
-                            disableControls()
-                        end
+                    else
+                        disableControls()
                     end
                 end
             end
-        else
-            Wait(2000)
-        end
+            if inZone and not shown then
+                shown = true
+                exports['qb-core']:DrawText('[E] Bennys','right')
+            elseif not inZone and shown then
+                exports['qb-core']:HideText()
+                shown = false
+            end
 
-        Wait(1)
+            if letSleep then
+                Citizen.Wait(500)
+            end
+        end
+        Wait(5)
     end
 end)
+
+
+
+
 
 --#[Event Handlers]#--
 RegisterNetEvent("qb-customs:purchaseSuccessful", function()
