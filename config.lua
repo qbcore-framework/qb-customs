@@ -1,5 +1,5 @@
 maxVehiclePerformanceUpgrades = 0 -- Set to 0 to have all the upgrades
-vehicleBaseRepairCost = 600
+vehicleBaseRepairCost = 420
 vehicleRepairCostMultiplier = 1
 moneyType = 'bank'
 
@@ -7,8 +7,14 @@ moneyType = 'bank'
 -- Add locations here
 -- Add jobs specific to the garage.
 bennyGarages = {
-    [1] = {coords = vector4(-211.55, -1324.55, 30.90, 319.73135375977), blip = true, useJob = false, job = {"mechanic", "police"}},
-    [2] = {coords = vector4(109.89, 6627.07, 31.78, 221.7938), blip = true, useJob = true, job = {"mechanic"}}
+    [1] = {coords = vector3(-213.23, -1323.59, 30.47), blip = true, useJob = false, job = {"mechanic", "police"}},
+    [2] = {coords = vector3(109.89, 6627.07, 31.78), blip = true, useJob = true, job = {"mechanic"}},
+    [3] = {coords = vector3(-38.63, -1052.87, 27.98), blip = true, useJob = false, job = {"mechanic", "police"}},
+    [4] = {coords = vector3(-32.78, -1065.56, 27.98), blip = false, useJob = false, job = {"mechanic", "police"}},
+    [5] = {coords = vector3(-221.97, -1329.93, 30.47), blip = false, useJob = false, job = {"mechanic", "police"}},
+    [6] = {coords = vector3(732.21, -1088.58, 21.75), blip = true, useJob = false, job = {"mechanic", "police"}},
+    --[7] = {coords = vector3(-1423.87, -449.72, 35.64), blip = true, useJob = true, job = {"mechanic"}},
+   -- [8] = {coords = vector3(-1411.2, -442.75, 35.64), blip = false, useJob = true, job = {"mechanic"}}
 }
 
 --[[ bennyLocations = {
@@ -272,8 +278,8 @@ vehicleCustomisation = {
     {category = "Strut", id = 41},
     {category = "Arch Cover", id = 42},
     {category = "Aerial", id = 43},
-    {category = "Trim B", id = 44},
-    {category = "Fuel Tank", id = 45},
+    --{category = "Trim B", id = 44},
+   --{category = "Fuel Tank", id = 45},
     {category = "Window", id = 46},
     {category = "Livery", id = 48},
     {category = "Horns", id = 14, 
