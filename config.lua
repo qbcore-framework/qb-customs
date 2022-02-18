@@ -86,7 +86,11 @@ vehicleWheelOptions = {
     {category = "Offroad", id = 4, wheelID = 23},
     {category = "Tuner", id = 5, wheelID = 23},
     {category = "Motorcycle", id = 6, wheelID = 23},
-    {category = "Highend", id = 7, wheelID = 23}
+    {category = "Highend", id = 7, wheelID = 23},
+    {category = "BennysWheel", id = 8, wheelID = 23},
+    {category = "BespokeWheel", id = 9, wheelID = 23},
+    {category = "Dragster", id = 10, wheelID = 23},
+    {category = "Street", id = 11, wheelID = 23}
 }
 
 -- TIRE SMOKE
