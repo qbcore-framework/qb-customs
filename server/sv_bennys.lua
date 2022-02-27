@@ -7,7 +7,7 @@ RegisterNetEvent('qb-customs:attemptPurchase', function(type, upgradeLevel)
     local Player = QBCore.Functions.GetPlayer(source)
     local balance = nil
     if Player.PlayerData.job.name == "mechanic" then
-        balance = exports['qb-bossmenu']:GetAccount(Player.PlayerData.job.name)
+        balance = exports['qb-management']:GetAccount(Player.PlayerData.job.name)
     else
         balance = Player.Functions.GetMoney(moneyType)
     end
