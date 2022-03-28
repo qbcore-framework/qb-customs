@@ -71,6 +71,8 @@ Config.Locations = {
         },
         categories = {
             repair = true,
+            mods = true,
+            armor = true,
             respray = true,
             liveries = true,
             wheels = true,
@@ -80,6 +82,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            turbo = true,
         },
         drawtextui = {
             text = "Bennys Motorworks"

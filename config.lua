@@ -3,11 +3,13 @@ Config = Config or {}
 Config.MoneyType = 'bank'
 Config.RepairMoneyType = 'cash'
 Config.UseRadial = false -- Will use qb-radial menu for entering instead of press E
+Config.UsePercentage = false -- Setting this to true prices will scale from vehicle price ( Shared/Vehicle.lua ) 
 Config.allowGovPlateIndex = false -- Setting this to true will allow all vehicles to purchase gov plate index "Blue on White #3" (only for emergency vehicles otherwise)
 
 maxVehiclePerformanceUpgrades = 0 -- | All Upgrades: 0 | No Upgrades: -1 | Can be -1 to 4
 vehicleBaseRepairCost = 600
 vehicleRepairCostMultiplier = 1
+vehicleBasePrice = 50000
 
 -- ADJUST PRICING
 vehicleCustomisationPrices = {
@@ -25,6 +27,23 @@ vehicleCustomisationPrices = {
     xenoncolours = {price = 500},
     oldlivery = {price = 500},
     plateindex = {price = 1000}
+}
+
+vehicleCustomisationPricesPercentage = {
+    cosmetics = 5,
+    respray = 2,
+    performance = {0, 3, 6, 9, 12, 15},
+    turbo = {0, 10},
+    wheels = 5,
+    customwheels = 5,
+    wheelsmoke = 2,
+    windowtint = 3,
+    neonside = 1,
+    neoncolours = 1,
+    headlights = 3,
+    xenoncolours = 1,
+    oldlivery = 5,
+    plateindex = 1
 }
 
 -- RESPRAY CATEGORIES
