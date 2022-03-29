@@ -222,7 +222,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth, categories, welcomeLabel, ve
 
     for _, v in ipairs(vehicleCustomisation) do
         local _, amountValidMods = CheckValidMods(v.category, v.id)
-        
+
         if amountValidMods > 0 or v.id == 18 then
             if (v.id == 11 or v.id == 12 or v.id == 13 or v.id == 15) then
                 if categories.mods and maxVehiclePerformanceUpgrades ~= -1 then
@@ -245,7 +245,9 @@ function InitiateMenus(isMotorcycle, vehicleHealth, categories, welcomeLabel, ve
                     populateMenu("mainMenu", v.id, v.category, "none")
                 end
             else
-                populateMenu("mainMenu", v.id, v.category, "none")
+                if categories.cosmetics then
+                    populateMenu("mainMenu", v.id, v.category, "none")
+                end
             end
         end
     end
@@ -654,7 +656,7 @@ function DisplayMenu(state, menu)
     updateMenuSubheading(menu)
 end
 
-function MenuManager(state)
+function MenuManager(state, repairOnly)
     if state then
         if currentMenuItem2 ~= "Installed" then
             if isMenuActive("modMenu") then
@@ -759,8 +761,13 @@ function MenuManager(state)
 
                         RepairVehicle()
 
-                        toggleMenu(false, "repairMenu")
-                        toggleMenu(true, currentMenu)
+                        if not repairOnly then
+                            toggleMenu(false, "repairMenu")
+                            toggleMenu(true, currentMenu)
+                        else
+                            ExitBennys()
+                            QBCore.Functions.Notify('Your vehicle was repaired!')
+                        end
                         updateMenuHeading(currentMenu)
                         updateMenuSubheading(currentMenu)
                         playSoundEffect("wrench", 0.4)

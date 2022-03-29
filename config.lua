@@ -1,5 +1,6 @@
 Config = Config or {}
 
+Config.Debug = false -- Set to True to enable Debug Prints
 Config.MoneyType = 'bank'
 Config.RepairMoneyType = 'cash'
 Config.UseRadial = false -- Will use qb-radial menu for entering instead of press E

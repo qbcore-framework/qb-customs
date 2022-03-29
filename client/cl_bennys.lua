@@ -1,7 +1,7 @@
 -----------------------
 ----   Variables   ----
 -----------------------
-local QBCore = exports['qb-core']:GetCoreObject()
+QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData()
 local CustomsData = {}
 
@@ -79,6 +79,7 @@ local function AllowJob(restrictionData, job)
     else
         if restrictionData.job == "any" or restrictionData.job == job or not restrictionData.job then return true end
     end
+    if Config.Debug then print('Denied for not having allowed job. ('..job..')') end
     return false
 end
 
@@ -90,6 +91,7 @@ local function AllowGang(restrictionData, gang)
     else
         if restrictionData.gang == "any" or restrictionData.gang == gang or not restrictionData.gang then return true end
     end
+    if Config.Debug then print('Denied for not having allowed gang. ('..gang..')') end
     return false
 end
 
@@ -98,7 +100,10 @@ local function AllowVehicleClass(restrictionData, vehicle)
 
     if restrictionData.deniedClasses then
         for _,class in ipairs(restrictionData.deniedClasses) do
-            if vehicleClass == class then return false end
+            if vehicleClass == class then
+                if Config.Debug then print('Denied for having denied vehicle class. ('..vehicleClass..')') end
+                return false
+            end
         end
     end
 
@@ -110,6 +115,7 @@ local function AllowVehicleClass(restrictionData, vehicle)
 
 
     if (restrictionData.allowedClasses and restrictionData.allowedClasses[1] == nil) or not restrictionData.allowedClasses or vehicleClass == 0 then return true end
+    if Config.Debug then print('Denied for not having allowed vehicle class. ('..vehicleClass..')') end
     return false
 end
 
@@ -791,21 +797,38 @@ function EnterLocation(override)
         xenons = false,
         horn = false,
         turbo = false,
+        cosmetics = false,
     }
 
     local canEnter = false
+    local repairOnly = true
     if next(CustomsData) then
         for k,v in pairs(locationData.categories) do
-            if not canEnter and v then canEnter = true end
+            if not canEnter and v then
+                if k ~= "repair" then repairOnly = false end
+                canEnter = true
+            end
             categories[k] = v
         end
     elseif override then canEnter = true end
+
+    if Config.Debug then
+        print('***************************************************************************')
+        print(string.format('EnterLocation Debug Start | CanEnter: %s | Repair Only: %s | Override: %s', canEnter, repairOnly, json.encode(override)))
+        print('***************************************************************************')
+        if next(locationData) then for k,v in pairs(locationData) do print(k, json.encode(v)) end end
+        for k,v in pairs(categories) do print(k,v) end
+        print('***************************************************************************')
+        print('EnterLocation Debug End')
+        print('***************************************************************************')
+    end
 
     if not canEnter then
         QBCore.Functions.Notify('You cant do anything here!')
         ExitBennys()
         return
     end
+
     if Config.UseRadial then
         exports['qb-radialmenu']:RemoveOption(radialMenuItemId)
         radialMenuItemId = nil
@@ -845,11 +868,11 @@ function EnterLocation(override)
     end)
 
     isPlyInBennys = true
-    DisableControls()
+    DisableControls(repairOnly)
 end
 
 
-function DisableControls()
+function DisableControls(repairOnly)
     CreateThread(function()
         while isPlyInBennys do
             DisableControlAction(1, 38, true) --Key: E
@@ -874,7 +897,7 @@ function DisableControls()
             end
 
             if IsDisabledControlJustReleased(1, 176) then --Key: Enter
-                MenuManager(true)
+                MenuManager(true, repairOnly)
                 PlaySoundFrontend(-1, "OK", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
             end
 
@@ -922,11 +945,22 @@ function CheckRestrictions(location)
     local _location = Config.Locations[location]
     local restrictions = _location.restrictions
 
+    if Config.Debug then
+        print('***************************************************************************')
+        print('Restriction Debug')
+        print('***************************************************************************')
+    end
+
     local isEnabled = _location.settings.enabled
     local vehicle = GetVehiclePedIsIn(PlayerPed, false)
     local allowedJob = AllowJob(restrictions, PlayerData.job.name)
     local allowedGang = AllowGang(restrictions, PlayerData.gang.name)
     local allowedClass = AllowVehicleClass(restrictions, GetVehiclePedIsIn(PlayerPed, false))
+
+    if Config.Debug then
+        print(string.format('Is Enabled: %s\nVehicle: %s\nallowedJob: %s\nallowedGang: %s\nallowedClass: %s', isEnabled, vehicle, allowedJob, allowedGang, allowedClass))
+        print('***************************************************************************')
+    end
     return isEnabled and vehicle ~= 0 and allowedJob and allowedGang and allowedClass
 end
 

@@ -15,8 +15,8 @@
         enabled = true,
     },
     categories = { -- Only include the categories you want. A category not listed defaults to FALSE.
+        mods = true, -- Performance Mods
         repair = true,
-        mods = true,
         armor = true,
         respray = true,
         liveries = true,
@@ -28,6 +28,7 @@
         xenons = true,
         horn = true,
         turbo = true,
+        cosmetics = true, -- Cosmetic Mods
     },
     drawtextui = {
         text = "Bennys Motorworks",
@@ -70,6 +71,7 @@ Config.Locations = {
             enabled = true,
         },
         categories = {
+            mods = true,
             repair = true,
             mods = true,
             armor = true,
@@ -82,7 +84,6 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
-            turbo = true,
         },
         drawtextui = {
             text = "Bennys Motorworks"
@@ -110,6 +111,7 @@ Config.Locations = {
             enabled = true,
         },
         categories = {
+            mods = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -120,6 +122,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Bennys Motorworks"
@@ -147,6 +150,7 @@ Config.Locations = {
             enabled = true,
         },
         categories = {
+            mods = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -157,6 +161,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Customs Motorworks"
@@ -184,6 +189,7 @@ Config.Locations = {
             enabled = true,
         },
         categories = {
+            mods = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -194,6 +200,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Harmony Motorworks"
@@ -231,6 +238,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Hayes Motorworks"
@@ -258,6 +266,7 @@ Config.Locations = {
             enabled = true,
         },
         categories = {
+            mods = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -268,6 +277,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Billys Motorworks"
@@ -295,6 +305,7 @@ Config.Locations = {
             enabled = true,
         },
         categories = {
+            mods = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -305,6 +316,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Tunershop",
@@ -331,6 +343,7 @@ Config.Locations = {
             tint = true,
             extras = true,
             plate = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "MRPD Motorworks",
@@ -358,6 +371,7 @@ Config.Locations = {
             tint = true,
             extras = true,
             plate = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Pillbox Motorworks"
