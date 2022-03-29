@@ -32,12 +32,26 @@ local originalTurboState = nil
 local attemptingPurchase = false
 local isPurchaseSuccessful = false
 local radialMenuItemId = nil
+local vehiclePrice = nil
 
 -----------------------
 ----   Functions   ----
 -----------------------
 
 --#[Local Functions]#--
+local function GetVehiclePrice()
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+
+    for k, v in pairs(QBCore.Shared.Vehicles) do
+        if GetEntityModel(vehicle) == v.hash then
+            vehiclePrice = v.price
+            break
+        else
+            vehiclePrice = vehicleBasePrice
+        end
+    end
+end
+
 local function saveVehicle()
     local plyPed = PlayerPedId()
     local veh = GetVehiclePedIsIn(plyPed, false)
@@ -111,7 +125,9 @@ function AttemptPurchase(type, upgradeLevel)
     if upgradeLevel ~= nil then
         upgradeLevel = upgradeLevel + 2
     end
-    TriggerServerEvent("qb-customs:server:attemptPurchase", type, upgradeLevel)
+
+    GetVehiclePrice()
+    TriggerServerEvent("qb-customs:server:attemptPurchase", type, upgradeLevel, vehiclePrice)
 
     attemptingPurchase = true
 
@@ -764,6 +780,8 @@ end
 
 
 function EnterLocation(override)
+    GetVehiclePrice()
+
     local locationData = Config.Locations[CustomsData.location]
     local categories = (override and override.categories) or {
         repair = false,
@@ -835,7 +853,8 @@ function EnterLocation(override)
     SetEntityCollision(plyVeh, false, true)
 
     local welcomeLabel = (locationData and locationData.settings.welcomeLabel) or "Welcome to Benny's Motorworks!"
-    InitiateMenus(isMotorcycle, GetVehicleBodyHealth(plyVeh), categories, welcomeLabel)
+
+    InitiateMenus(isMotorcycle, GetVehicleBodyHealth(plyVeh), categories, welcomeLabel, vehiclePrice)
 
     SetTimeout(100, function()
         if GetVehicleBodyHealth(plyVeh) < 1000.0 then
