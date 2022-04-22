@@ -287,12 +287,8 @@ function InitiateMenus(isMotorcycle, vehicleHealth, categories, welcomeLabel, ve
                     tempNum = tempNum + 1
 
                     if maxVehiclePerformanceUpgrades == 0 then
-
-                        if Config.UsePercentage then
-                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.performance[tempNum]))
-                        else
-                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.performance.prices[tempNum])
-                        end
+local price = Config.UsePercentage and math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.performance[tempNum]) or vehicleCustomisationPrices.performance.prices[tempNum]
+populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
 
                         if currentMod == n.id then
                             updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
