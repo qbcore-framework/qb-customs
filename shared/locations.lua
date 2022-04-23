@@ -72,9 +72,8 @@ Config.Locations = {
         },
         categories = {
             mods = true,
+            turbo = true,
             repair = true,
-            mods = true,
-            armor = true,
             respray = true,
             liveries = true,
             wheels = true,
@@ -84,6 +83,7 @@ Config.Locations = {
             neons = true,
             xenons = true,
             horn = true,
+            cosmetics = true,
         },
         drawtextui = {
             text = "Bennys Motorworks"
@@ -112,6 +112,7 @@ Config.Locations = {
         },
         categories = {
             mods = true,
+            turbo = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -151,6 +152,7 @@ Config.Locations = {
         },
         categories = {
             mods = true,
+            turbo = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -190,6 +192,7 @@ Config.Locations = {
         },
         categories = {
             mods = true,
+            turbo = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -229,6 +232,7 @@ Config.Locations = {
         },
         categories = {
             repair = true,
+            turbo = true,
             respray = true,
             liveries = true,
             wheels = true,
@@ -267,6 +271,7 @@ Config.Locations = {
         },
         categories = {
             mods = true,
+            turbo = true,
             repair = true,
             respray = true,
             liveries = true,
@@ -306,6 +311,7 @@ Config.Locations = {
         },
         categories = {
             mods = true,
+            turbo = true,
             repair = true,
             respray = true,
             liveries = true,

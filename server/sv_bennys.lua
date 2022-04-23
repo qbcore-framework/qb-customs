@@ -41,40 +41,37 @@ RegisterNetEvent('qb-customs:server:attemptPurchase', function(type, upgradeLeve
         if balance >= repairCost then
             Player.Functions.RemoveMoney(moneyType, repairCost, "bennys")
             TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
+	        exports['qb-management']:AddMoney("mechanic", repairCost)
         else
             TriggerClientEvent('qb-customs:client:purchaseFailed', source)
         end
     elseif type == "performance" or type == "turbo" then
+        local price = 0
         if Config.UsePercentage then
-            if balance >= math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage[type][upgradeLevel]) then
-                TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
-                Player.Functions.RemoveMoney(moneyType, math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage[type][upgradeLevel]), "bennys")
-            else
-                TriggerClientEvent('qb-customs:client:purchaseFailed', source)
-            end
+            price = math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage[type][upgradeLevel])
         else
-            if balance >= vehicleCustomisationPrices[type].prices[upgradeLevel] then
-                TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
-                Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].prices[upgradeLevel], "bennys")
-            else
-                TriggerClientEvent('qb-customs:client:purchaseFailed', source)
-            end
+            price = vehicleCustomisationPrices[type].prices[upgradeLevel]
+        end
+        if balance >= price then
+            TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
+            Player.Functions.RemoveMoney(moneyType, price, "bennys")
+	        exports['qb-management']:AddMoney("mechanic", price) 
+        else
+            TriggerClientEvent('qb-customs:client:purchaseFailed', source)
         end
     else
+        local price = 0
         if Config.UsePercentage then
-            if balance >= math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage[type]) then
-                TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
-                Player.Functions.RemoveMoney(moneyType, math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage[type]), "bennys")
-            else
-                TriggerClientEvent('qb-customs:client:purchaseFailed', source)
-            end
+            price = math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage[type])
         else
-            if balance >= vehicleCustomisationPrices[type].price then
-                TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
-                Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].price, "bennys")
-            else
-                TriggerClientEvent('qb-customs:client:purchaseFailed', source)
-            end
+            price = vehicleCustomisationPrices[type].price
+        end
+        if balance >= price then
+            TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
+            Player.Functions.RemoveMoney(moneyType, price, "bennys")
+	        exports['qb-management']:AddMoney("mechanic", price) 
+        else
+            TriggerClientEvent('qb-customs:client:purchaseFailed', source)
         end
     end
 end)

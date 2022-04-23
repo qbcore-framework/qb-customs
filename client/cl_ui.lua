@@ -11,6 +11,7 @@ local currentResprayType = 0
 local currentWheelCategory = 0
 local currentNeonSide = 0
 local menuStructure = {}
+local vehPrice = vehicleBasePrice
 
 -----------------------
 ----   Functions   ----
@@ -205,6 +206,7 @@ local function updateCurrentMenuItemID(id, item, item2)
 end
 
 function InitiateMenus(isMotorcycle, vehicleHealth, categories, welcomeLabel, vehiclePrice)
+    vehPrice = vehiclePrice
     local plyPed = PlayerPedId()
     local plyVeh = GetVehiclePedIsIn(plyPed, false)
     --#[Repair Menu]#--
@@ -233,7 +235,7 @@ function InitiateMenus(isMotorcycle, vehicleHealth, categories, welcomeLabel, ve
                     populateMenu("mainMenu", v.id, v.category, "none")
                 end
             elseif v.id == 14 then
-                if categories.horns then
+                if categories.horn then
                     populateMenu("mainMenu", v.id, v.category, "none")
                 end
             elseif v.id == 18 then
@@ -287,20 +289,26 @@ function InitiateMenus(isMotorcycle, vehicleHealth, categories, welcomeLabel, ve
                     tempNum = tempNum + 1
 
                     if maxVehiclePerformanceUpgrades == 0 then
-local price = Config.UsePercentage and math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.performance[tempNum]) or vehicleCustomisationPrices.performance.prices[tempNum]
-populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
-
+                        local price = 0
+                        if Config.UsePercentage then
+                            price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.performance[tempNum])
+                        else
+                            price = vehicleCustomisationPrices.performance.prices[tempNum]
+                        end
+                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
+                        
                         if currentMod == n.id then
                             updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
                         end
                     else
                         if tempNum <= (maxVehiclePerformanceUpgrades + 1) then
-
+                            local price = 0
                             if Config.UsePercentage then
-                                populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.performance[tempNum]))
+                                price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.performance[tempNum])
                             else
-                                populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.performance.prices[tempNum])
+                                price = vehicleCustomisationPrices.performance.prices[tempNum]
                             end
+                            populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. price)
 
                             if currentMod == n.id then
                                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
@@ -315,12 +323,14 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Enable or Disable Turbo")
 
                 populateMenu(v.category:gsub("%s+", "") .. "Menu", -1, "Disable", "$0")
-
+                
+                local price = 0
                 if Config.UsePercentage then
-                    populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Enable", "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.turbo[2]))
+                    price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.turbo[2])
                 else
-                    populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Enable", "$" .. vehicleCustomisationPrices.turbo.prices[2])
+                    price = vehicleCustomisationPrices.turbo.prices[2]
                 end
+                populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Enable", "$" .. price)
 
                 updateItem2Text(v.category:gsub("%s+", "") .. "Menu", currentTurboState, "Installed")
 
@@ -329,12 +339,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
                 createMenu(v.category:gsub("%s+", "") .. "Menu", v.category .. " Customisation", "Choose a Mod")
 
                 for m, n in pairs(validMods) do
-
+                    local price = 0
                     if Config.UsePercentage then
-                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.cosmetics))
+                        price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.cosmetics)
                     else
-                        populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.cosmetics.price)
+                        price = vehicleCustomisationPrices.cosmetics.price
                     end
+                    populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" .. price)
 
                     if currentMod == n.id then
                         updateItem2Text(v.category:gsub("%s+", "") .. "Menu", n.id, "Installed")
@@ -372,11 +383,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
         createMenu(v.category .. "Menu", v.category .. " Colours", "Choose a Colour")
 
         for m, n in ipairs(v.colours) do
+            local price = 0
             if Config.UsePercentage then
-                populateMenu(v.category .. "Menu", n.id, n.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.respray))
+                price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.respray)
             else
-                populateMenu(v.category .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.respray.price)
+                price = vehicleCustomisationPrices.respray.price
             end
+            populateMenu(v.category .. "Menu", n.id, n.name, "$" .. price)
         end
 
         finishPopulatingMenu(v.category .. "Menu")
@@ -404,12 +417,14 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
             createMenu(v.category:gsub("%s+", "") .. "Menu", v.category, "Enable or Disable Custom Wheels")
 
             populateMenu(v.category:gsub("%s+", "") .. "Menu", 0, "Disable", "$0")
-
+            
+            local price = 0
             if Config.UsePercentage then
-                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.customwheels))
+                price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.customwheels)
             else
-                populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. vehicleCustomisationPrices.customwheels.price)
+                price = vehicleCustomisationPrices.customwheels.price
             end
+            populateMenu(v.category:gsub("%s+", "") .. "Menu", 1, "Enable", "$" .. price)
 
             updateItem2Text(v.category:gsub("%s+", "") .. "Menu", currentCustomWheelState, "Installed")
 
@@ -422,13 +437,7 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
                     createMenu(v.category .. "Menu", v.category .. " Wheels", "Choose a Wheel")
 
                     for m, n in pairs(validMods) do
-
-                        if Config.UsePercentage then
-                            populateMenu(v.category .. "Menu", n.id, n.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.wheels))
-                        else
-                            populateMenu(v.category .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.wheels.price)
-                        end
-
+                        populateMenu(v.category .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.wheels.price)
                     end
 
                     finishPopulatingMenu(v.category .. "Menu")
@@ -439,13 +448,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
                 createMenu(v.category .. "Menu", v.category .. " Wheels", "Choose a Wheel")
 
                 for m, n in pairs(validMods) do
-
+                    local price = 0
                     if Config.UsePercentage then
-                        populateMenu(v.category .. "Menu", n.id, n.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.wheels))
+                        price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.wheels)
                     else
-                        populateMenu(v.category .. "Menu", n.id, n.name, "$" .. vehicleCustomisationPrices.wheels.price)
+                        price = vehicleCustomisationPrices.wheels.price
                     end
-
+                    populateMenu(v.category .. "Menu", n.id, n.name, "$" .. price)
                 end
 
                 finishPopulatingMenu(v.category .. "Menu")
@@ -458,12 +467,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
     createMenu("TyreSmokeMenu", "Tyre Smoke Customisation", "Choose a Colour")
 
     for k, v in ipairs(vehicleTyreSmokeOptions) do
-        
+        local price = 0
         if Config.UsePercentage then
-            populateMenu("TyreSmokeMenu", k, v.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.wheelsmoke))
+            price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.wheelsmoke)
         else
-            populateMenu("TyreSmokeMenu", k, v.name, "$" .. vehicleCustomisationPrices.wheelsmoke.price)
+            price = vehicleCustomisationPrices.wheelsmoke.price
         end
+        populateMenu("TyreSmokeMenu", k, v.name, "$" .. price)
 
         if v.r == currentWheelSmokeR and v.g == currentWheelSmokeG and v.b == currentWheelSmokeB then
             updateItem2Text("TyreSmokeMenu", k, "Installed")
@@ -477,12 +487,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
     createMenu("WindowTintMenu", "Window Tint Customisation", "Choose a Tint")
 
     for k, v in ipairs(vehicleWindowTintOptions) do
-
+        local price = 0
         if Config.UsePercentage then
-            populateMenu("WindowTintMenu", v.id, v.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.windowtint))
+            price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.windowtint)
         else
-            populateMenu("WindowTintMenu", v.id, v.name, "$" .. vehicleCustomisationPrices.windowtint.price)
+            price = vehicleCustomisationPrices.windowtint.price
         end
+        populateMenu("WindowTintMenu", v.id, v.name, "$" .. price)
 
         if currentWindowTint == v.id then
             updateItem2Text("WindowTintMenu", v.id, "Installed")
@@ -518,13 +529,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
     }
     for i=0, #plateTypes-1 do
         if i ~= 4 or (i == 4 and GetVehicleClass(plyVeh) == 18) or Config.allowGovPlateIndex then
-
+            local price = 0
             if Config.UsePercentage then
-                populateMenu("PlateIndexMenu", i, plateTypes[i+1], "$"..math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.plateindex))
+                price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.plateindex)
             else
-                populateMenu("PlateIndexMenu", i, plateTypes[i+1], "$"..vehicleCustomisationPrices.plateindex.price)
+                price = vehicleCustomisationPrices.plateindex.price
             end
-            
+            populateMenu("PlateIndexMenu", i, plateTypes[i+1], "$".. price)
             if tempPlateIndex == i then
                 updateItem2Text("PlateIndexMenu", i, "Installed")
             end
@@ -559,12 +570,14 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
         createMenu(v.name:gsub("%s+", "") .. "Menu", "Neon Customisation", "Enable or Disable Neon")
 
         populateMenu(v.name:gsub("%s+", "") .. "Menu", 0, "Disabled", "$0")
-
+        
+        local price = 0
         if Config.UsePercentage then
-            populateMenu(v.name:gsub("%s+", "") .. "Menu", 1, "Enabled", "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.neonside))
+            price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.neonside)
         else
-            populateMenu(v.name:gsub("%s+", "") .. "Menu", 1, "Enabled", "$" .. vehicleCustomisationPrices.neonside.price)
+            price = vehicleCustomisationPrices.neonside.price
         end
+        populateMenu(v.name:gsub("%s+", "") .. "Menu", 1, "Enabled", "$" .. price)
 
         updateItem2Text(v.name:gsub("%s+", "") .. "Menu", currentNeonState, "Installed")
 
@@ -576,12 +589,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
     createMenu("NeonColoursMenu", "Neon Colours", "Choose a Colour")
 
     for k, v in ipairs(vehicleNeonOptions.neonColours) do
-
+        local price = 0
         if Config.UsePercentage then
-            populateMenu("NeonColoursMenu", k, vehicleNeonOptions.neonColours[k].name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.neoncolours))
+            price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.neoncolours)
         else
-            populateMenu("NeonColoursMenu", k, vehicleNeonOptions.neonColours[k].name, "$" .. vehicleCustomisationPrices.neoncolours.price)
+            price = vehicleCustomisationPrices.neoncolours.price
         end
+        populateMenu("NeonColoursMenu", k, vehicleNeonOptions.neonColours[k].name, "$" .. price)
 
         if currentNeonR == vehicleNeonOptions.neonColours[k].r and currentNeonG == vehicleNeonOptions.neonColours[k].g and currentNeonB == vehicleNeonOptions.neonColours[k].b then
             updateItem2Text("NeonColoursMenu", k, "Installed")
@@ -603,12 +617,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
     createMenu("HeadlightsMenu", "Headlights Customisation", "Enable or Disable Xenons")
 
     populateMenu("HeadlightsMenu", 0, "Disable Xenons", "$0")
-
+    local price = 0
     if Config.UsePercentage then
-        populateMenu("HeadlightsMenu", 1, "Enable Xenons", "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.headlights))
+        price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.headlights)
     else
-        populateMenu("HeadlightsMenu", 1, "Enable Xenons", "$" .. vehicleCustomisationPrices.headlights.price)
+        price = vehicleCustomisationPrices.headlights.price
     end
+    populateMenu("HeadlightsMenu", 1, "Enable Xenons", "$" .. price)
 
     updateItem2Text("HeadlightsMenu", currentXenonState, "Installed")
 
@@ -619,12 +634,13 @@ populateMenu(v.category:gsub("%s+", "") .. "Menu", n.id, n.name, "$" ..price )
     createMenu("XenonColoursMenu", "Xenon Colours", "Choose a Colour")
 
     for k, v in ipairs(vehicleXenonOptions.xenonColours) do
-
+        local price = 0
         if Config.UsePercentage then
-            populateMenu("XenonColoursMenu", v.id, v.name, "$" .. math.floor((vehiclePrice / 100) * vehicleCustomisationPricesPercentage.xenoncolours))
+            price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.xenoncolours)
         else
-            populateMenu("XenonColoursMenu", v.id, v.name, "$" .. vehicleCustomisationPrices.xenoncolours.price)
+            price = vehicleCustomisationPrices.xenoncolours.price
         end
+        populateMenu("XenonColoursMenu", v.id, v.name, "$" .. price)
 
         if currentXenonColour == v.id then
             updateItem2Text("XenonColoursMenu", v.id, "Installed")
@@ -929,12 +945,13 @@ function MenuManager(state, repairOnly)
         elseif isMenuActive("WheelsMenu") then
             if currentWheelCategory ~= 20 and currentWheelCategory ~= -1 then
                 local currentWheel = GetOriginalWheel()
-                
+                local price = 0
                 if Config.UsePercentage then
-                    updateItem2Text(currentMenu, currentWheel, "$" .. vehicleCustomisationPricesPercentage.wheels)
+                    price = math.floor((vehPrice / 100) * vehicleCustomisationPricesPercentage.wheels)
                 else
-                    updateItem2Text(currentMenu, currentWheel, "$" .. vehicleCustomisationPrices.wheels.price)
+                    price = vehicleCustomisationPrices.wheels.price
                 end
+                updateItem2Text(currentMenu, currentWheel, "$" .. price)
 
                 RestoreOriginalWheels()
             end
