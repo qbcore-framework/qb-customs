@@ -41,16 +41,10 @@ local vehiclePrice = nil
 --#[Local Functions]#--
 local function GetVehiclePrice()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-
-    for k, v in pairs(QBCore.Shared.Vehicles) do
-        if GetEntityModel(vehicle) == v.hash then
-            vehiclePrice = v.price
-            break
-        else
-            vehiclePrice = vehicleBasePrice
-        end
-    end
+    local hash = GetEntityModel(vehicle)
+    vehiclePrice = QBShared.VehicleHashes[hash] and QBShared.VehicleHashes[hash].price or vehicleBasePrice
 end
+
 
 local function saveVehicle()
     local plyPed = PlayerPedId()
