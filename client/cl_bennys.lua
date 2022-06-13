@@ -765,7 +765,7 @@ function EnterLocation(override)
         return
     end
 
-    if Config.UseRadial then
+    if Config.UseRadial and not override then
         exports['qb-radialmenu']:RemoveOption(radialMenuItemId)
         radialMenuItemId = nil
     end
